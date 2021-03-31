@@ -1,0 +1,10 @@
+MODULE SimpleModule;
+
+VAR
+  x : REAL;
+  
+BEGIN
+	x := 1320.123456789
+END
+
+END SimpleModule.
