@@ -2,9 +2,11 @@ MODULE SimpleModule;
 
 VAR
   x : REAL;
-  
+  y : REAL;
 BEGIN
-	x := 1320.123456789
+	x := 1.12;
+  y := 2.5;
+  x := x + y
 END
 
 END SimpleModule.

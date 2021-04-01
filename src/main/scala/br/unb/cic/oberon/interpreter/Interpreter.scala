@@ -258,19 +258,21 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
   def aritmeticExpression(left: Expression, right: Expression, op: Int) : Expression = {
     val vl = left.accept(this).asInstanceOf[Value[T]]
     val vr = right.accept(this).asInstanceOf[Value[T]]
-    var v1 = Unit
-    var v2 = Unit
-     
-     (vl.isInstanceOf[Int], vr.isInstanceOf[Int]) match 
+
+    var float = false 
+    println((vl.isInstanceOf[IntValue], vr.isInstanceOf[IntValue]))
+     (vl.isInstanceOf[IntValue], vr.isInstanceOf[IntValue]) match 
      {
-        case (true, true) => {v1 = left.accept(this).asInstanceOf[Int]; v2 = right.accept(this).asInstanceOf[Int]}
-        case _ => {v1 = left.accept(this).asInstanceOf[Float]; v2 = right.accept(this).asInstanceOf[Float]}
+        case (true, true) => float = false 
+        case _ => float = true       
      }
 
-     op match
+     (op, float) match
      {
-        case 1: v1 + v2;
-        case 2: v1 - v2;
+        case (1, false) => IntValue(vl.asInstanceOf[IntValue].value + vr.asInstanceOf[IntValue].value);
+        case (2, false) => IntValue(vl.asInstanceOf[IntValue].value - vr.asInstanceOf[IntValue].value);
+        case (1, true) => RealValue(vl.asInstanceOf[RealValue].value + vr.asInstanceOf[RealValue].value);
+        case (2, true) => RealValue(vl.asInstanceOf[RealValue].value - vr.asInstanceOf[RealValue].value);
      }
     
       // case 2 => (vl.isInstanceOf[Int], vr.isInstanceOf[Int]) match {
@@ -279,7 +281,7 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
       //   case (true, false) => IntValue(vl.asInstanceOf[Int] + vr.asInstanceOf[Float])
       //   case (false, false) => IntValue(vl.asInstanceOf[Float] + vr.asInstanceOf[Float])
       // }
-    }
+    
   }
 
   // def sum(v1: Expression, v2: Expression) : Expression = {
