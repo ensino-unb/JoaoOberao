@@ -24,7 +24,7 @@ class InterpreterTest extends AnyFunSuite {
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(RealValue(30.toFloat))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(RealValue(27.toFloat))) // FOR TO x
 
   }
 

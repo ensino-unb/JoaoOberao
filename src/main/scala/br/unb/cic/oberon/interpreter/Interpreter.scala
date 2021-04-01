@@ -256,22 +256,22 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
   }
 
   def aritmeticExpression(left: Expression, right: Expression, op: Int) : Expression = {
-    val vl = left.accept(this).asInstanceOf[Int]
-    val vr = right.accept(this).asInstanceOf[Int]
+    val vl = left.accept(this).asInstanceOf[Value[T]]
+    val vr = right.accept(this).asInstanceOf[Value[T]]
 
     op match {
-      case 1 => (vl.isInstanceOf[Int], vr.isInstanceOf[Int]) match {
-        case (true, true) => IntValue(vl.asInstanceOf[Int] + vr.asInstanceOf[Int])
-        case (false, true) => IntValue(vl.asInstanceOf[Float] + vr.asInstanceOf[Int])
-        case (true, false) => IntValue(vl.asInstanceOf[Int] + vr.asInstanceOf[Float])
-        case (false, false) => IntValue(vl.asInstanceOf[Float] + vr.asInstanceOf[Float])
+      case 1 => (vl.isInstanceOf[IntValue], vr.isInstanceOf[IntValue]) match {
+        case (true, true) => IntValue(vl.asInstanceOf[IntValue].value + vr.asInstanceOf[IntValue].value)
+        case (false, true) => RealValue(vl.asInstanceOf[RealValue].value + vr.asInstanceOf[IntValue].value)
+        case (true, false) => RealValue(vl.asInstanceOf[IntValue].value + vr.asInstanceOf[RealValue].value)
+        case (false, false) => RealValue(vl.asInstanceOf[RealValue].value + vr.asInstanceOf[RealValue].value)
       }
-    
-      case 2 => (vl.isInstanceOf[Int], vr.isInstanceOf[Int]) match {
-        case (true, true) => IntValue(vl.asInstanceOf[Int] + vr.asInstanceOf[Int])
-        case (false, true) => IntValue(vl.asInstanceOf[Float] + vr.asInstanceOf[Int])
-        case (true, false) => IntValue(vl.asInstanceOf[Int] + vr.asInstanceOf[Float])
-        case (false, false) => IntValue(vl.asInstanceOf[Float] + vr.asInstanceOf[Float])
+      
+      case 2 => (vl.isInstanceOf[IntValue], vr.isInstanceOf[IntValue]) match {
+        case (true, true) => IntValue(vl.asInstanceOf[IntValue].value - vr.asInstanceOf[IntValue].value)
+        case (false, true) => RealValue(vl.asInstanceOf[RealValue].value - vr.asInstanceOf[IntValue].value)
+        case (true, false) => RealValue(vl.asInstanceOf[IntValue].value - vr.asInstanceOf[RealValue].value)
+        case (false, false) => RealValue(vl.asInstanceOf[RealValue].value - vr.asInstanceOf[RealValue].value)
       }
     }
   }

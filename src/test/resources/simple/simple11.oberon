@@ -4,7 +4,8 @@ VAR
   x : REAL;
   
 BEGIN
-	x := 1320.123456789
+	x := 13.5;
+  x := x + x
 END
 
 END SimpleModule.
