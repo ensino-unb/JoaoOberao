@@ -45,6 +45,7 @@ trait Expression {
 }
 
 abstract class Value[T](val value: T) extends Expression
+// abstract class Number[T<:Integer Or T <: Float](v: T) extends Value[T](v)
 
 case class Brackets(exp: Expression) extends Expression
 case class IntValue(v: Int) extends Value[Int](v)

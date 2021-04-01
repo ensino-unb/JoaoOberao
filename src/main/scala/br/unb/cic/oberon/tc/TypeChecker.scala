@@ -24,7 +24,7 @@ class ExpressionTypeVisitor(val typeChecker: TypeChecker) extends OberonVisitorA
     case LTExpression(left, right) => computeBinExpressionType(left, right, IntegerType, BooleanType)
     case GTEExpression(left, right) => computeBinExpressionType(left, right, IntegerType, BooleanType)
     case LTEExpression(left, right) => computeBinExpressionType(left, right, IntegerType, BooleanType)
-    case AddExpression(left, right) => computeBinExpressionType(left, right, IntegerType, IntegerType)
+    case AddExpression(left, right) => computeBinExpressionType(left, right, IntegerType, IntegerType) // todo passar array de tipos (sugestao)
     case SubExpression(left, right) => computeBinExpressionType(left, right, IntegerType, IntegerType)
     case MultExpression(left, right) => computeBinExpressionType(left, right, IntegerType, IntegerType)
     case DivExpression(left, right) => computeBinExpressionType(left, right, IntegerType, IntegerType)
@@ -50,6 +50,7 @@ class ExpressionTypeVisitor(val typeChecker: TypeChecker) extends OberonVisitorA
     }
   }
 
+  // todo
   def computeBinExpressionType(left: Expression, right: Expression, expected: Type, result: Type) : Option[Type] = {
     val t1 = left.accept(this)
     val t2 = right.accept(this)

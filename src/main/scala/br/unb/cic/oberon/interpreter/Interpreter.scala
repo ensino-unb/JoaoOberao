@@ -232,8 +232,7 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
     case LTExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => BoolValue(v1.value < v2.value))
     case GTEExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => BoolValue(v1.value >= v2.value))
     case LTEExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => BoolValue(v1.value <= v2.value))
-    case AddExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => IntValue(v1.value + v2.value))
-    case AddExpression(left, right) => binExpression(left, right, (v1: Value[Float], v2: Value[Float]) => RealValue(v1.value + v2.value))
+    case AddExpression(left, right) => binExpression(left, right, sum2)//(v1: Value[Number], v2: Value[Number])  => sum(v1, v2)
     case SubExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => IntValue(v1.value - v2.value))
     case MultExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => IntValue(v1.value * v2.value))
     case DivExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => IntValue(v1.value / v2.value))
@@ -255,6 +254,22 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
     returnValue.get
   }
 
+  def sum (left: Expression, right: Expression, fn: (Value[T], Value[T]) => Expression){
+    val vl = left.accept(this)
+    val vr = right.accept(this)
+
+    (vl, vr) match {
+      case (IntValue(v1), IntValue(v2)) => IntValue(fn(v1, v2))
+      case (IntValue(v1), RealValue(v2)) => RealValue(v1 + v2)
+      case (RealValue(v1), IntValue(v2)) => RealValue(v1 + v2)
+      case (RealValue(v1), RealValue(v2)) => RealValue(v1 + v2)
+
+      // case (Number(v1), Number(v2)) => RealValue(v1 + v2)
+    }
+
+  }
+
+
   /**
    * Eval a binary expression.
    *
@@ -269,8 +284,19 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
   def binExpression[T](left: Expression, right: Expression, fn: (Value[T], Value[T]) => Expression): Expression = {
     val v1 = left.accept(this).asInstanceOf[Value[T]]
     val v2 = right.accept(this).asInstanceOf[Value[T]]
+
+    // mult, div, sub
+    // int () int => int
+    // int () float => float
+    // float () int => float
+    // float () float => float
+
+
+
     fn(v1, v2)
   }
+
+  def sum2 (v1: IntValue, v2: IntValue): Expression = IntValue(v1 + v2)
 
 }
 
