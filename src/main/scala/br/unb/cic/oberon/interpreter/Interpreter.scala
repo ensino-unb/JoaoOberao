@@ -256,23 +256,29 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
   }
 
   def aritmeticExpression(left: Expression, right: Expression, op: Int) : Expression = {
-    val vl = left.accept(this).asInstanceOf[Int]
-    val vr = right.accept(this).asInstanceOf[Int]
+    val vl = left.accept(this).asInstanceOf[Value[T]]
+    val vr = right.accept(this).asInstanceOf[Value[T]]
+    var v1 = Unit
+    var v2 = Unit
+     
+     (vl.isInstanceOf[Int], vr.isInstanceOf[Int]) match 
+     {
+        case (true, true) => {v1 = left.accept(this).asInstanceOf[Int]; v2 = right.accept(this).asInstanceOf[Int]}
+        case _ => {v1 = left.accept(this).asInstanceOf[Float]; v2 = right.accept(this).asInstanceOf[Float]}
+     }
 
-    op match {
-      case 1 => (vl.isInstanceOf[Int], vr.isInstanceOf[Int]) match {
-        case (true, true) => IntValue(vl.asInstanceOf[Int] + vr.asInstanceOf[Int])
-        case (false, true) => IntValue(vl.asInstanceOf[Float] + vr.asInstanceOf[Int])
-        case (true, false) => IntValue(vl.asInstanceOf[Int] + vr.asInstanceOf[Float])
-        case (false, false) => IntValue(vl.asInstanceOf[Float] + vr.asInstanceOf[Float])
-      }
+     op match
+     {
+        case 1: v1 + v2;
+        case 2: v1 - v2;
+     }
     
-      case 2 => (vl.isInstanceOf[Int], vr.isInstanceOf[Int]) match {
-        case (true, true) => IntValue(vl.asInstanceOf[Int] + vr.asInstanceOf[Int])
-        case (false, true) => IntValue(vl.asInstanceOf[Float] + vr.asInstanceOf[Int])
-        case (true, false) => IntValue(vl.asInstanceOf[Int] + vr.asInstanceOf[Float])
-        case (false, false) => IntValue(vl.asInstanceOf[Float] + vr.asInstanceOf[Float])
-      }
+      // case 2 => (vl.isInstanceOf[Int], vr.isInstanceOf[Int]) match {
+      //   case (true, true) => IntValue(vl.asInstanceOf[Int] + vr.asInstanceOf[Int])
+      //   case (false, true) => IntValue(vl.asInstanceOf[Float] + vr.asInstanceOf[Int])
+      //   case (true, false) => IntValue(vl.asInstanceOf[Int] + vr.asInstanceOf[Float])
+      //   case (false, false) => IntValue(vl.asInstanceOf[Float] + vr.asInstanceOf[Float])
+      // }
     }
   }
 
