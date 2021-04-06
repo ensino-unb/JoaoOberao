@@ -45,11 +45,21 @@ trait Expression {
 }
 
 abstract class Value[T](val value: T) extends Expression
+
 // abstract class Number[T<:Integer Or T <: Float](v: T) extends Value[T](v)
 
 case class Brackets(exp: Expression) extends Expression
 case class IntValue(v: Int) extends Value[Int](v)
+{
+   def +(that: IntValue) = new IntValue(this.v + that.v)
+   def -(that: IntValue) = new IntValue(this.v - that.v)
+}
 case class RealValue(v: Float) extends Value[Float](v)
+{
+   def +(that: RealValue) = new RealValue(this.v + that.v)
+   def +(that: IntValue) = new RealValue(this.v + that.v)
+   def -(that: RealValue) = new RealValue(this.v - that.v)
+}
 case class BoolValue(v: Boolean) extends Value[Boolean](v)
 case class ArrayValue(v: List[Expression]) extends Value[List[Expression]](v)
 case class ArraySubscript(arrayBase: Expression, index: Expression) extends Expression
