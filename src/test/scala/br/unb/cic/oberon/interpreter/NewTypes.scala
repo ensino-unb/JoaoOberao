@@ -233,8 +233,8 @@ class WakaWaka extends AnyFunSuite{
   }
 }
 
-  test("Testing LONGREAL and REAL /") {
-    val path = Paths.get(getClass.getClassLoader.getResource("aritmetic/aritmetic1.oberon").getFile)
+  test("Testing LONG and LONG +") {
+    val path = Paths.get(getClass.getClassLoader.getResource("aritmetic/aritmetic16.oberon").getFile)
 
     assert(path != null)
 
@@ -244,12 +244,12 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(0.96296296296296666666666666666667.toDouble))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(LongRealValue(4446744073709551614.toLong))) // FOR TO x
   }
 }
 
-  test("Testing LONGREAL and REAL /") {
-    val path = Paths.get(getClass.getClassLoader.getResource("aritmetic/aritmetic1.oberon").getFile)
+  test("Testing LONG and LONG -") {
+    val path = Paths.get(getClass.getClassLoader.getResource("aritmetic/aritmetic17.oberon").getFile)
 
     assert(path != null)
 
@@ -259,6 +259,48 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(0.96296296296296666666666666666667.toDouble))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(LongRealValue(0.toLong))) // FOR TO x
+  }
+
+  test("Testing LONG and LONG *") {
+    val path = Paths.get(getClass.getClassLoader.getResource("aritmetic/aritmetic18.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(LongRealValue(4446744073709551614.toLong))) // FOR TO x
+  }
+
+  test("Testing LONG and LONG /") {
+    val path = Paths.get(getClass.getClassLoader.getResource("aritmetic/aritmetic19.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(LongRealValue(1.toLong))) // FOR TO x
+  }
+
+  test("Testing LONGINT and INTEGER operations") {
+    val path = Paths.get(getClass.getClassLoader.getResource("aritmetic/aritmetic20.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(LongRealValue(1000000.toLong))) // FOR TO x
   }
 }
