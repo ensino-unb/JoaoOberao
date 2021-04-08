@@ -49,6 +49,9 @@ expression
  : '(' expression ')'                                                                     #Brackets
  | intValue                                                                               #IntegerValue
  | realValue                                                                              #FloatValue
+ | shortValue                                                                             #ShortValue
+ | longValue                                                                              #LongValue
+ | doubleValue                                                                            #DoubleValue 
  | boolValue                                                                              #BooleanValue 
  | name = Id                                                                              #Variable
  | name = Id '(' arguments? ')'                                                           #FunctionCall
@@ -99,11 +102,20 @@ intValue : INT ;
 
 realValue: REAL ;
 
+shortValue: SHORT ;
+
+longValue: LONGINT ;
+
+doubleValue: LONGREAL ;
+
 boolValue: TRUE | FALSE ;
 
 oberonType
  : 'INTEGER'         #IntegerType
  | 'REAL'            #RealType
+ | 'SHORT'           #ShotType
+ | 'LONGINT'         #LongType
+ | 'LONGREAL'        #DoubleType
  | 'BOOLEAN'         #BooleanType
  | name = Id         #ReferenceType        // Reference for user defined types
  ;
@@ -111,6 +123,12 @@ oberonType
 INT : Digit+;
 
 REAL : Digit+ '.' Digit+;
+
+SHORT : Digit+;
+
+LONGINT : Digit+;
+
+LONGREAL : Digit+ '.' Digit+;
 
 TRUE  : 'True' ;
 FALSE : 'False'  ;
