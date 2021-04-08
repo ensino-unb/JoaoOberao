@@ -120,15 +120,17 @@ oberonType
  | name = Id         #ReferenceType        // Reference for user defined types
  ;
 
+LONGINT : Digit+;
+
+LONGREAL : Digit+ '.' Digit+;
+
 INT : Digit+;
 
 REAL : Digit+ '.' Digit+;
 
 SHORTINT : Digit+;
 
-LONGINT : Digit+;
 
-LONGREAL : Digit+ '.' Digit+;
 
 TRUE  : 'True' ;
 FALSE : 'False'  ;
