@@ -51,7 +51,7 @@ case class Brackets(exp: Expression) extends Expression
 case class IntValue(v: Int) extends Value[Int](v)
 case class RealValue(v: Float) extends Value[Float](v)
 case class ShortValue(v: Short) extends Value[Short](v)
-case class LongIntValue(v: Long) extends Value[Long](v)
+case class LongValue(v: Long) extends Value[Long](v)
 case class LongRealValue(v: Double) extends Value[Double](v)
 case class BoolValue(v: Boolean) extends Value[Boolean](v)
 case class ArrayValue(v: List[Expression]) extends Value[List[Expression]](v)
@@ -116,7 +116,7 @@ trait Type {
 case object IntegerType extends Type
 case object RealType extends Type
 case object ShortType extends Type
-case object LongIntType extends Type
+case object LongType extends Type
 case object LongRealType extends Type
 case object BooleanType extends Type
 case object UndefinedType extends Type

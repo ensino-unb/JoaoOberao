@@ -234,9 +234,8 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
     case LTEExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => BoolValue(v1.value <= v2.value))
     case AddExpression(left, right) => aritmeticExpression(left, right, 1) //(v1: Value[Number], v2: Value[Number])  => sum(v1, v2)
     case SubExpression(left, right) => aritmeticExpression(left, right, 2) //(v1: Value[Number], v2: Value[Number])  => sum(v1, v2)
-    // case SubExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => IntValue(v1.value - v2.value))
-    case MultExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => IntValue(v1.value * v2.value))
-    case DivExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => IntValue(v1.value / v2.value))
+    case MultExpression(left, right) => aritmeticExpression(left, right, 3)
+    case DivExpression(left, right) => aritmeticExpression(left, right, 4)
     case AndExpression(left, right) => binExpression(left, right, (v1: Value[Boolean], v2: Value[Boolean]) => BoolValue(v1.value && v2.value))
     case OrExpression(left, right) => binExpression(left, right, (v1: Value[Boolean], v2: Value[Boolean]) => BoolValue(v1.value || v2.value))
     case FunctionCallExpression(name, args) => {
@@ -256,24 +255,88 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
   }
 
   def aritmeticExpression(left: Expression, right: Expression, op: Int) : Expression = {
-    val vl = left.accept(this).asInstanceOf[Value[T]]
-    val vr = right.accept(this).asInstanceOf[Value[T]]
+    var vl = left.accept(this).asInstanceOf[Value[T]]
+    var vr = right.accept(this).asInstanceOf[Value[T]]
+
+    // [long real, real, long int, int, short int]
+
+    var types = Array(
+      vl.isInstanceOf[LongRealValue] || vr.isInstanceOf[LongRealValue],
+      vl.isInstanceOf[RealValue]     || vr.isInstanceOf[RealValue],
+      vl.isInstanceOf[LongValue]     || vr.isInstanceOf[LongValue],
+      vl.isInstanceOf[IntValue]      || vr.isInstanceOf[IntValue],
+      vl.isInstanceOf[ShortValue]    || vr.isInstanceOf[ShortValue]
+    )
 
     op match {
-      case 1 => (vl.isInstanceOf[IntValue], vr.isInstanceOf[IntValue]) match {
-        case (true, true) => IntValue(vl.asInstanceOf[IntValue].value + vr.asInstanceOf[IntValue].value)
-        case (false, true) => RealValue(vl.asInstanceOf[RealValue].value + vr.asInstanceOf[IntValue].value)
-        case (true, false) => RealValue(vl.asInstanceOf[IntValue].value + vr.asInstanceOf[RealValue].value)
-        case (false, false) => RealValue(vl.asInstanceOf[RealValue].value + vr.asInstanceOf[RealValue].value)
+      case 1 => {
+        if (types(0) == true) LongRealValue(vl.value.asInstanceOf[Double] + vr.value.asInstanceOf[Double])
+        else if (types(1) == true) RealValue(vl.value.asInstanceOf[Float] + vr.value.asInstanceOf[Float])
+        else if (types(2) == true) LongValue(vl.value.asInstanceOf[Long] + vr.value.asInstanceOf[Long])
+        else if (types(3) == true) IntValue(vl.value.asInstanceOf[Int] + vr.value.asInstanceOf[Int])
+        else ShortValue((vl.value.asInstanceOf[Short] + vr.value.asInstanceOf[Short]).toShort)
       }
-      
-      case 2 => (vl.isInstanceOf[IntValue], vr.isInstanceOf[IntValue]) match {
-        case (true, true) => IntValue(vl.asInstanceOf[IntValue].value - vr.asInstanceOf[IntValue].value)
-        case (false, true) => RealValue(vl.asInstanceOf[RealValue].value - vr.asInstanceOf[IntValue].value)
-        case (true, false) => RealValue(vl.asInstanceOf[IntValue].value - vr.asInstanceOf[RealValue].value)
-        case (false, false) => RealValue(vl.asInstanceOf[RealValue].value - vr.asInstanceOf[RealValue].value)
+
+      case 2 => {
+        if (types(0) == true) LongRealValue(vl.value.asInstanceOf[Double] - vr.value.asInstanceOf[Double])
+        else if (types(1) == true) RealValue(vl.value.asInstanceOf[Float] - vr.value.asInstanceOf[Float])
+        else if (types(2) == true) LongValue(vl.value.asInstanceOf[Long] - vr.value.asInstanceOf[Long])
+        else if (types(3) == true) IntValue(vl.value.asInstanceOf[Int] - vr.value.asInstanceOf[Int])
+        else ShortValue((vl.value.asInstanceOf[Short] - vr.value.asInstanceOf[Short]).toShort)
       }
+
+      case 3 => {
+        if (types(0) == true) LongRealValue(vl.value.asInstanceOf[Double] * vr.value.asInstanceOf[Double])
+        else if (types(1) == true) RealValue(vl.value.asInstanceOf[Float] * vr.value.asInstanceOf[Float])
+        else if (types(2) == true) LongValue(vl.value.asInstanceOf[Long] * vr.value.asInstanceOf[Long])
+        else if (types(3) == true) IntValue(vl.value.asInstanceOf[Int] * vr.value.asInstanceOf[Int])
+        else ShortValue((vl.value.asInstanceOf[Short] * vr.value.asInstanceOf[Short]).toShort)
+      }
+
+      case 4 => {
+        if (types(0) == true) LongRealValue(vl.value.asInstanceOf[Double] / vr.value.asInstanceOf[Double])
+        else if (types(1) == true) RealValue(vl.value.asInstanceOf[Float] / vr.value.asInstanceOf[Float])
+        else if (types(2) == true) LongValue(vl.value.asInstanceOf[Long] / vr.value.asInstanceOf[Long])
+        else if (types(3) == true) IntValue(vl.value.asInstanceOf[Int] / vr.value.asInstanceOf[Int])
+        else ShortValue((vl.value.asInstanceOf[Short] / vr.value.asInstanceOf[Short]).toShort)
+      }
+
+      // case 2 => {
+      //   case types(0) => LongRealValue(vl.value.asInstanceOf[Double] - vr.value.asInstanceOf[Double])
+      //   case types(1) => RealValue(vl.value.asInstanceOf[Float] - vr.value.asInstanceOf[Float])
+      //   case types(2) => LongValue(vl.value.asInstanceOf[Long] - vr.value.asInstanceOf[Long])
+      //   case types(3) => IntValue(vl.value.asInstanceOf[Int] - vr.value.asInstanceOf[Int])
+      //   case types(4) => ShortValue(vl.value.asInstanceOf[Short] - vr.value.asInstanceOf[Short])
+      // }
     }
+
+    // true match {
+    //   case types(0) => vl = vl.value.toDouble; vr = vr.value.toDouble; 
+    //   case types(1) => vl = vl.asInstanceOf(RealValue);     vr = vr.asInstanceOf(RealValue); 
+    //   case types(2) => vl = vl.asInstanceOf(LongIntValue);  vr = vr.asInstanceOf(LongIntValue); 
+    //   case types(3) => vl = vl.asInstanceOf(IntValue);      vr = vr.asInstanceOf(IntValue); 
+    //   case types(4) => vl = vl.asInstanceOf(ShortIntValue); vr = vr.asInstanceOf(ShortIntValue); 
+    // }
+
+    // op match {
+    //   case 1 => vl.v
+    // }
+
+    // op match {
+    //   case 1 => (vl.isInstanceOf[IntValue], vr.isInstanceOf[IntValue]) match {
+    //     case (true, true) => IntValue(vl.asInstanceOf[IntValue].value + vr.asInstanceOf[IntValue].value)
+    //     case (false, true) => RealValue(vl.asInstanceOf[RealValue].value + vr.asInstanceOf[IntValue].value)
+    //     case (true, false) => RealValue(vl.asInstanceOf[IntValue].value + vr.asInstanceOf[RealValue].value)
+    //     case (false, false) => RealValue(vl.asInstanceOf[RealValue].value + vr.asInstanceOf[RealValue].value)
+    //   }
+      
+    //   case 2 => (vl.isInstanceOf[IntValue], vr.isInstanceOf[IntValue]) match {
+    //     case (true, true) => IntValue(vl.asInstanceOf[IntValue].value - vr.asInstanceOf[IntValue].value)
+    //     case (false, true) => RealValue(vl.asInstanceOf[RealValue].value - vr.asInstanceOf[IntValue].value)
+    //     case (true, false) => RealValue(vl.asInstanceOf[IntValue].value - vr.asInstanceOf[RealValue].value)
+    //     case (false, false) => RealValue(vl.asInstanceOf[RealValue].value - vr.asInstanceOf[RealValue].value)
+    //   }
+    // }
   }
 
   // def sum(v1: Expression, v2: Expression) : Expression = {
