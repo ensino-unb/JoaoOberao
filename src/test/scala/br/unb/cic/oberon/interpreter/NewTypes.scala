@@ -113,7 +113,7 @@ class WakaWaka extends AnyFunSuite{
   }
 }
 
-  test("Testing LONGINT and SHORINT /") {
+  test("Testing LONGINT and SHORTINT /") {
     val path = Paths.get(getClass.getClassLoader.getResource("aritmetic/aritmetic8.oberon").getFile)
 
     assert(path != null)
@@ -124,7 +124,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(20.toLong))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(LongIntValue(20.toLong))) // FOR TO x
   }
 }
 
@@ -199,7 +199,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(3582.25.toFloat))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(RealValue(3582.25.toFloat))) // FOR TO x
   }
 }
 
@@ -214,7 +214,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(80.25.toFloat))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(RealValue(80.25.toFloat))) // FOR TO x
   }
 }
 
