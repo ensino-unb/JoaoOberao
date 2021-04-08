@@ -223,6 +223,9 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
     case Brackets(expression) => expression.accept(this)
     case IntValue(v) => IntValue(v)
     case RealValue(v) => RealValue(v)
+    case LongRealValue(v) => LongRealValue(v)
+    case LongValue(v) => LongValue(v)
+    case ShortValue(v) => ShortValue(v)
     case BoolValue(v) => BoolValue(v)
     case Undef() => Undef()
     case VarExpression(name) => interpreter.env.lookup(name).get
@@ -267,6 +270,11 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
       vl.isInstanceOf[IntValue]      || vr.isInstanceOf[IntValue],
       vl.isInstanceOf[ShortValue]    || vr.isInstanceOf[ShortValue]
     )
+
+    for (i <- 0 until 5) {
+      print(types(i))
+    }
+    print('\n')
 
     op match {
       case 1 => {

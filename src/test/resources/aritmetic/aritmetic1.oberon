@@ -2,7 +2,7 @@ MODULE SimpleModule;
 
 VAR
   x : LONGINT;
-  y : SHORT;
+  y : SHORTINT;
 BEGIN
     x := 5000;
     y := 7;
