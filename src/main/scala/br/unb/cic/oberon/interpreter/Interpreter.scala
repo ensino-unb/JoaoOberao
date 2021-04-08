@@ -308,60 +308,8 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
         else if (types(3) == true) IntValue(vl.value.asInstanceOf[Int] / vr.value.asInstanceOf[Int])
         else ShortValue((vl.value.asInstanceOf[Short] / vr.value.asInstanceOf[Short]).toShort)
       }
-
-      // case 2 => {
-      //   case types(0) => LongRealValue(vl.value.asInstanceOf[Double] - vr.value.asInstanceOf[Double])
-      //   case types(1) => RealValue(vl.value.asInstanceOf[Float] - vr.value.asInstanceOf[Float])
-      //   case types(2) => LongValue(vl.value.asInstanceOf[Long] - vr.value.asInstanceOf[Long])
-      //   case types(3) => IntValue(vl.value.asInstanceOf[Int] - vr.value.asInstanceOf[Int])
-      //   case types(4) => ShortValue(vl.value.asInstanceOf[Short] - vr.value.asInstanceOf[Short])
-      // }
     }
-
-    // true match {
-    //   case types(0) => vl = vl.value.toDouble; vr = vr.value.toDouble; 
-    //   case types(1) => vl = vl.asInstanceOf(RealValue);     vr = vr.asInstanceOf(RealValue); 
-    //   case types(2) => vl = vl.asInstanceOf(LongIntValue);  vr = vr.asInstanceOf(LongIntValue); 
-    //   case types(3) => vl = vl.asInstanceOf(IntValue);      vr = vr.asInstanceOf(IntValue); 
-    //   case types(4) => vl = vl.asInstanceOf(ShortIntValue); vr = vr.asInstanceOf(ShortIntValue); 
-    // }
-
-    // op match {
-    //   case 1 => vl.v
-    // }
-
-    // op match {
-    //   case 1 => (vl.isInstanceOf[IntValue], vr.isInstanceOf[IntValue]) match {
-    //     case (true, true) => IntValue(vl.asInstanceOf[IntValue].value + vr.asInstanceOf[IntValue].value)
-    //     case (false, true) => RealValue(vl.asInstanceOf[RealValue].value + vr.asInstanceOf[IntValue].value)
-    //     case (true, false) => RealValue(vl.asInstanceOf[IntValue].value + vr.asInstanceOf[RealValue].value)
-    //     case (false, false) => RealValue(vl.asInstanceOf[RealValue].value + vr.asInstanceOf[RealValue].value)
-    //   }
-      
-    //   case 2 => (vl.isInstanceOf[IntValue], vr.isInstanceOf[IntValue]) match {
-    //     case (true, true) => IntValue(vl.asInstanceOf[IntValue].value - vr.asInstanceOf[IntValue].value)
-    //     case (false, true) => RealValue(vl.asInstanceOf[RealValue].value - vr.asInstanceOf[IntValue].value)
-    //     case (true, false) => RealValue(vl.asInstanceOf[IntValue].value - vr.asInstanceOf[RealValue].value)
-    //     case (false, false) => RealValue(vl.asInstanceOf[RealValue].value - vr.asInstanceOf[RealValue].value)
-    //   }
-    // }
   }
-
-  // def sum(v1: Expression, v2: Expression) : Expression = {
-
-  //   (v1, v2) match {
-  //     case (IntValue(v1), IntValue(v2)) => IntValue(v1 + v2)
-  //     case _ => RealValue(v1 + v2)
-  //   }
-  // } 
-
-  // def sub(v1: Expression, v2: Expression) : Expression = {
-
-  //   (v1, v2) match {
-  //     case (IntValue(v1), IntValue(v2)) => IntValue(v1 - v2)
-  //     case _ => RealValue(v1 - v2)
-  //   }
-  // } 
 
   /**
    * Eval a binary expression.

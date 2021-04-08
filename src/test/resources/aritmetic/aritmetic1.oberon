@@ -4,8 +4,8 @@ VAR
   x : LONGINT;
   y : SHORTINT;
 BEGIN
-    x := 5000;
-    y := 7;
+    x := 5000D;
+    y := 7S;
     x := x * y;
     x := x / y;
     x := x + y;

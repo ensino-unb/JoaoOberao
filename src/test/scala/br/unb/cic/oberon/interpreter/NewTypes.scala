@@ -417,4 +417,60 @@ class WakaWaka extends AnyFunSuite{
     module.accept(interpreter)
     assert(interpreter.env.lookup("x") == Some(RealValue(6.08F))) // FOR TO x
   }
+
+  test("Testing REAL and INT +") {
+    val path = Paths.get(getClass.getClassLoader.getResource("aritmetic/aritmetic30.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(RealValue(19.2F))) // FOR TO x
+  }
+
+  test("Testing REAL and INT -") {
+    val path = Paths.get(getClass.getClassLoader.getResource("aritmetic/aritmetic31.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(RealValue(11.2F))) // FOR TO x
+  }
+
+  test("Testing REAL and INT *") {
+    val path = Paths.get(getClass.getClassLoader.getResource("aritmetic/aritmetic32.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(RealValue(60.8F))) // FOR TO x
+  }
+
+  test("Testing REAL and INT /") {
+    val path = Paths.get(getClass.getClassLoader.getResource("aritmetic/aritmetic33.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(RealValue(3.8F))) // FOR TO x
+  }
 }
