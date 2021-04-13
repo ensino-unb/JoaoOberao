@@ -271,42 +271,46 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
       vl.isInstanceOf[ShortValue]    || vr.isInstanceOf[ShortValue]
     )
 
+    val v1 = vl.value.toString
+    val v2 = vr.value.toString
+    /*
     for (i <- 0 until 5) {
       print(types(i))
     }
     print('\n')
+    */
 
     op match {
       case 1 => {
-        if (types(0) == true) LongRealValue(vl.value.asInstanceOf[Double] + vr.value.asInstanceOf[Double])
-        else if (types(1) == true) RealValue(vl.value.asInstanceOf[Float] + vr.value.asInstanceOf[Float])
-        else if (types(2) == true) LongValue(vl.value.asInstanceOf[Long] + vr.value.asInstanceOf[Long])
-        else if (types(3) == true) IntValue(vl.value.asInstanceOf[Int] + vr.value.asInstanceOf[Int])
-        else ShortValue((vl.value.asInstanceOf[Short] + vr.value.asInstanceOf[Short]).toShort)
+        if (types(0) == true) {println("-----> " + (v1.toDouble + v2.toDouble).toDouble); LongRealValue((v1.toDouble + v2.toDouble).toDouble)}
+        else if (types(1) == true) RealValue((v1.toFloat + v2.toFloat).toFloat)
+        else if (types(2) == true) LongValue((v1.toLong + v2.toLong).toLong)
+        else if (types(3) == true) IntValue((v1.toInt + v2.toInt).toInt)
+        else ShortValue((v1.toShort + v2.toShort).toShort)
       }
 
       case 2 => {
-        if (types(0) == true) LongRealValue(vl.value.asInstanceOf[Double] - vr.value.asInstanceOf[Double])
-        else if (types(1) == true) RealValue(vl.value.asInstanceOf[Float] - vr.value.asInstanceOf[Float])
-        else if (types(2) == true) LongValue(vl.value.asInstanceOf[Long] - vr.value.asInstanceOf[Long])
-        else if (types(3) == true) IntValue(vl.value.asInstanceOf[Int] - vr.value.asInstanceOf[Int])
-        else ShortValue((vl.value.asInstanceOf[Short] - vr.value.asInstanceOf[Short]).toShort)
+        if (types(0) == true) LongRealValue((v1.toDouble - v2.toDouble).toDouble)
+        else if (types(1) == true) RealValue((v1.toFloat - v2.toFloat).toFloat)
+        else if (types(2) == true) LongValue((v1.toLong - v2.toLong).toLong)
+        else if (types(3) == true) IntValue((v1.toInt - v2.toInt).toInt)
+        else ShortValue((v1.toShort - v2.toShort).toShort)
       }
 
       case 3 => {
-        if (types(0) == true) LongRealValue(vl.value.asInstanceOf[Double] * vr.value.asInstanceOf[Double])
-        else if (types(1) == true) RealValue(vl.value.asInstanceOf[Float] * vr.value.asInstanceOf[Float])
-        else if (types(2) == true) LongValue(vl.value.asInstanceOf[Long] * vr.value.asInstanceOf[Long])
-        else if (types(3) == true) IntValue(vl.value.asInstanceOf[Int] * vr.value.asInstanceOf[Int])
-        else ShortValue((vl.value.asInstanceOf[Short] * vr.value.asInstanceOf[Short]).toShort)
+        if (types(0) == true) LongRealValue((v1.toDouble * v2.toDouble).toDouble)
+        else if (types(1) == true) RealValue((v1.toFloat * v2.toFloat).toFloat)
+        else if (types(2) == true) LongValue((v1.toLong * v2.toLong).toLong)
+        else if (types(3) == true) IntValue((v1.toInt * v2.toInt).toInt)
+        else ShortValue((v1.toShort * v2.toShort).toShort)
       }
 
       case 4 => {
-        if (types(0) == true) LongRealValue(vl.value.asInstanceOf[Double] / vr.value.asInstanceOf[Double])
-        else if (types(1) == true) RealValue(vl.value.asInstanceOf[Float] / vr.value.asInstanceOf[Float])
-        else if (types(2) == true) LongValue(vl.value.asInstanceOf[Long] / vr.value.asInstanceOf[Long])
-        else if (types(3) == true) IntValue(vl.value.asInstanceOf[Int] / vr.value.asInstanceOf[Int])
-        else ShortValue((vl.value.asInstanceOf[Short] / vr.value.asInstanceOf[Short]).toShort)
+        if (types(0) == true) LongRealValue((v1.toDouble / v2.toDouble).toDouble)
+        else if (types(1) == true) RealValue((v1.toFloat / v2.toFloat).toFloat)
+        else if (types(2) == true) LongValue((v1.toLong / v2.toLong).toLong)
+        else if (types(3) == true) IntValue((v1.toInt / v2.toInt).toInt)
+        else ShortValue((v1.toShort / v2.toShort).toShort)
       }
     }
   }
