@@ -127,23 +127,34 @@ class ParserVisitor {
     if (typeVisitor.baseType == null) UndefinedType else typeVisitor.baseType
   }
 
+  var tipo : Type;
   class OberonTypeVisitor extends OberonBaseVisitor[Unit] {
     var baseType: Type = _
 
-    override def visitIntegerType(ctx: OberonParser.IntegerTypeContext): Unit =
+    override def visitIntegerType(ctx: OberonParser.IntegerTypeContext): Unit = {
       baseType = IntegerType
+      tipo = IntegerType
+    }
 
-    override def visitRealType(ctx: OberonParser.RealTypeContext): Unit =
+    override def visitRealType(ctx: OberonParser.RealTypeContext): Unit = {
       baseType = RealType
+      tipo = RealType
+    }
 
-    override def visitShortType(ctx: OberonParser.ShortTypeContext): Unit =
+    override def visitShortType(ctx: OberonParser.ShortTypeContext): Unit = {
       baseType = ShortType
+      tipo = ShortType
+    }
 
-    override def visitLongRealType(ctx: OberonParser.LongRealTypeContext): Unit =
+    override def visitLongRealType(ctx: OberonParser.LongRealTypeContext): Unit = {
       baseType = LongRealType
+      tipo = LongRealType
+    }
 
-    override def visitLongType(ctx: OberonParser.LongTypeContext): Unit =
+    override def visitLongType(ctx: OberonParser.LongTypeContext): Unit = {
       baseType = LongType
+      tipo = LongType
+    }
 
     override def visitBooleanType(ctx: OberonParser.BooleanTypeContext): Unit = {
       baseType = BooleanType
@@ -160,7 +171,10 @@ class ParserVisitor {
     var exp: Expression = _
 
     override def visitIntValue(ctx: OberonParser.IntValueContext): Unit =
-      exp = IntValue(ctx.getText.toInt)
+      {
+        exp = IntValue(ctx.getText.toInt)
+      }
+
 
     override def visitRealValue(ctx: OberonParser.RealValueContext): Unit =
       exp = RealValue(ctx.getText.toFloat)

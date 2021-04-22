@@ -23,7 +23,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongValue(5000.toLong))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(LongValue(5000L))) // FOR TO x
   }
 
   test("Testing LONGREAL and REAL +") {
@@ -51,7 +51,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(-0.04999999999995.toDouble))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(LongRealValue(0.04999999999995.toDouble))) // FOR TO x
   }
 
   test("Testing LONGREAL and REAL *") {
@@ -135,7 +135,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(15.00000000000005))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(LongRealValue(15.00000000000005.toDouble))) // FOR TO x
   }
 
   test("Testing LONGREAL and INTEGER -") {
@@ -149,7 +149,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(5.00000000000005))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(LongRealValue(5.00000000000005.toDouble))) // FOR TO x
   }
 
   test("Testing LONGREAL and INTEGER *") {
@@ -163,7 +163,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(50.00000000000025))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(LongRealValue(50.00000000000025.toDouble))) // FOR TO x
   }
 
   test("Testing LONGREAL and INTEGER /") {
@@ -177,7 +177,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(2.00000000000001))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(LongRealValue(2.00000000000001.toDouble))) // FOR TO x
   }
 
   test("Testing REAL and INTEGER * -") {
@@ -247,7 +247,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(0.toLong))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(LongValue(0L))) // FOR TO x
   }
 
   test("Testing LONG and LONG *") {
@@ -275,7 +275,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(1.toLong))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(LongValue(1L))) // FOR TO x
   }
 
   test("Testing LONGINT and INTEGER operations") {
@@ -289,11 +289,12 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(1000000.toLong))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(LongValue(1000000L))) // FOR TO x
   }
 
   test("Testing INTEGER and INTEGER +") {
     val path = Paths.get(getClass.getClassLoader.getResource("aritmetic/aritmetic21.oberon").getFile)
+
 
     assert(path != null)
 
@@ -373,7 +374,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(RealValue(17.7F))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(RealValue(17.7.toFloat))) // FOR TO x
   }
 
   test("Testing REAL and REAL -") {
@@ -387,7 +388,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(RealValue(12.7F))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(RealValue(12.7.toFloat))) // FOR TO x
   }
 
   test("Testing REAL and REAL *") {
@@ -401,7 +402,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(RealValue(38F))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(RealValue(38.toFloat))) // FOR TO x
   }
 
   test("Testing REAL and REAL /") {
@@ -415,7 +416,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(RealValue(6.08F))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(RealValue(6.08.toFloat))) // FOR TO x
   }
 
   test("Testing REAL and INT +") {
@@ -429,7 +430,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(RealValue(19.2F))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(RealValue(19.2.toFloat))) // FOR TO x
   }
 
   test("Testing REAL and INT -") {
@@ -443,7 +444,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(RealValue(11.2F))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(RealValue(11.2.toFloat))) // FOR TO x
   }
 
   test("Testing REAL and INT *") {
@@ -457,7 +458,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(RealValue(60.8F))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(RealValue(60.8.toFloat))) // FOR TO x
   }
 
   test("Testing REAL and INT /") {
@@ -471,6 +472,6 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(RealValue(3.8F))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(RealValue(3.8.toFloat))) // FOR TO x
   }
 }

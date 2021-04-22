@@ -27,10 +27,11 @@ class Interpreter extends OberonVisitorAdapter {
   var exit = false
   val env = new Environment[Expression]()
   var printStream : PrintStream = new PrintStream(System.out)
-
+  var variaveis = List.empty[VariableDeclaration]
   override def visit(module: OberonModule): Unit = {
     // set up the global declarations
     module.constants.foreach(c => c.accept(this))
+    variaveis = module.variables
     module.variables.foreach(v => v.accept(this))
     module.procedures.foreach(p => p.accept(this))
     module.userTypes.foreach(userType => userType.accept(this))
