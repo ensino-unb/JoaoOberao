@@ -31,7 +31,7 @@ object ScalaParser {
 }
 
 class ParserVisitor {
-
+  var tipo = -1;
   var module: OberonModule = _
 
   def visitCompilationUnit(ctx: OberonParser.CompilationUnitContext): Unit = {
@@ -127,33 +127,35 @@ class ParserVisitor {
     if (typeVisitor.baseType == null) UndefinedType else typeVisitor.baseType
   }
 
-  var tipo : Type;
+
   class OberonTypeVisitor extends OberonBaseVisitor[Unit] {
     var baseType: Type = _
 
     override def visitIntegerType(ctx: OberonParser.IntegerTypeContext): Unit = {
+      tipo = 0
       baseType = IntegerType
-      tipo = IntegerType
     }
 
     override def visitRealType(ctx: OberonParser.RealTypeContext): Unit = {
+      tipo = 1
       baseType = RealType
-      tipo = RealType
     }
 
     override def visitShortType(ctx: OberonParser.ShortTypeContext): Unit = {
+      tipo = 2
       baseType = ShortType
-      tipo = ShortType
+
     }
 
     override def visitLongRealType(ctx: OberonParser.LongRealTypeContext): Unit = {
+      tipo = 3
       baseType = LongRealType
-      tipo = LongRealType
     }
 
     override def visitLongType(ctx: OberonParser.LongTypeContext): Unit = {
+      tipo = 4
       baseType = LongType
-      tipo = LongType
+
     }
 
     override def visitBooleanType(ctx: OberonParser.BooleanTypeContext): Unit = {
@@ -172,12 +174,22 @@ class ParserVisitor {
 
     override def visitIntValue(ctx: OberonParser.IntValueContext): Unit =
       {
-        exp = IntValue(ctx.getText.toInt)
+        if(tipo == 0)
+          exp = IntValue(ctx.getText.toInt);
+        else if(tipo == 2)
+          exp = ShortValue(ctx.getText.toShort);
+        else exp = LongValue(ctx.getText.toLong)
+
       }
 
 
     override def visitRealValue(ctx: OberonParser.RealValueContext): Unit =
-      exp = RealValue(ctx.getText.toFloat)
+      {
+        if(tipo == 1)
+          exp = RealValue(ctx.getText.toFloat)
+        else exp = LongRealValue(ctx.getText.toDouble)
+      }
+
 
     override def visitLongValue(ctx: OberonParser.LongValueContext): Unit =
       exp = LongValue(ctx.getText.toLong)
