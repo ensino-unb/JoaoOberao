@@ -74,7 +74,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(26.500000005.toDouble))) // FOR TO x
+    assert(interpreter.env.lookup("var2") == Some(LongRealValue(26.500000005.toDouble))) // FOR TO x
   }
 
   test("Testing LONGREAL and REAL -") {

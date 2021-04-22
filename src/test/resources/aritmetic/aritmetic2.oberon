@@ -1,12 +1,12 @@
 MODULE SimpleModule;
 
 VAR
-  y : REAL;
-  x : LONGREAL;
+  var1 : REAL;
+  var2 : LONGREAL;
 BEGIN
-    y := 13.5;
-    x := 13.000000005;
-    x := x + y
+    var1 := 13.5;
+    var2 := 13.000000005;
+    var2 := var2 + var1
 END
 
 END SimpleModule.

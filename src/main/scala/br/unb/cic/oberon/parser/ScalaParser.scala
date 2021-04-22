@@ -34,11 +34,12 @@ object ScalaParser {
 class ParserVisitor {
   var tipo = Queue[Int]();
   var module: OberonModule = _
+  var variables : List[br.unb.cic.oberon.ast.VariableDeclaration] = null
 
   def visitCompilationUnit(ctx: OberonParser.CompilationUnitContext): Unit = {
     val name = ctx.name
     val constants = ctx.declarations().constant().asScala.toList.map(c => visitConstant(c))
-    val variables = ctx.declarations().varDeclaration().asScala.toList.map(v => visitVariableDeclaration(v)).flatten
+    variables = ctx.declarations().varDeclaration().asScala.toList.map(v => visitVariableDeclaration(v)).flatten
     val procedures = ctx.declarations().procedure().asScala.toList.map(p => visitProcedureDeclaration(p))
     val userTypes = ctx.declarations().userTypeDeclaration().asScala.toList.map(t => visitUserDefinedType(t))
     val block = visitModuleBlock(ctx.block())
@@ -175,29 +176,43 @@ class ParserVisitor {
 
     override def visitIntValue(ctx: OberonParser.IntValueContext): Unit =
     {
-      var t = 0
-      if (!tipo.isEmpty)
-        t = tipo.dequeue()
-            
-      if(t == 0)
-        exp = IntValue(ctx.getText.toInt);
-      else if(t == 2)
-        exp = ShortValue(ctx.getText.toShort);
-      else exp = LongValue(ctx.getText.toLong)
+      var a = ctx.parent.parent.getText().split(":")(0)
 
+      for(v <- variables)
+      {
+        if(v.name == a)
+        {
+          if(v.variableType == IntegerType)
+            exp = IntValue(ctx.getText.toInt);
+          else if (v.variableType == ShortType)
+            exp = ShortValue(ctx.getText.toShort);
+          else exp = LongValue(ctx.getText.toLong)
+
+          return
+        }
+      }
+      exp = IntValue(ctx.getText.toInt);
     }
 
 
     override def visitRealValue(ctx: OberonParser.RealValueContext): Unit =
       {
-        var t = 1
-        if (!tipo.isEmpty)
-          t = tipo.dequeue()
+        var a = ctx.parent.parent.getText().split(":")(0)
 
-        if(t == 1)
-          exp = RealValue(ctx.getText.toFloat)
-        else if(t == 3)
-          exp = LongRealValue(ctx.getText.toDouble)
+        for(v <- variables)
+        {
+          if(v.name == a)
+          {
+            if(v.variableType == RealType)
+              exp = RealValue(ctx.getText.toFloat);
+            else
+              exp = LongRealValue(ctx.getText.toDouble)
+
+            return
+          }
+        }
+
+        exp = RealValue(ctx.getText.toFloat);
       }
 
     override def visitBoolValue(ctx: OberonParser.BoolValueContext): Unit =
