@@ -274,12 +274,6 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
 
     val v1 = vl.value.toString
     val v2 = vr.value.toString
-    /*
-    for (i <- 0 until 5) {
-      print(types(i))
-    }
-    print('\n')
-    */
 
     op match {
       case 1 => {

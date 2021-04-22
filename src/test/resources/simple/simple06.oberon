@@ -7,4 +7,8 @@ VAR
   abc : INTEGER;
   def : BOOLEAN;
 
+  BEGIN
+    abc := 10
+  END
+
 END SimpleModule.
