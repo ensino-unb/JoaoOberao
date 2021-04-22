@@ -174,28 +174,30 @@ class ParserVisitor {
     var exp: Expression = _
 
     override def visitIntValue(ctx: OberonParser.IntValueContext): Unit =
-      {
-        val t = tipo.dequeue()
-        if(t == 0)
-          exp = IntValue(ctx.getText.toInt);
-        else if(t == 2)
-          exp = ShortValue(ctx.getText.toShort);
-        else if (t == 4)
-          exp = LongValue(ctx.getText.toLong);
-        else
-          println("------------------> DEU RUIM")
-      }
+    {
+      var t = 0
+      if (!tipo.isEmpty)
+        t = tipo.dequeue()
+            
+      if(t == 0)
+        exp = IntValue(ctx.getText.toInt);
+      else if(t == 2)
+        exp = ShortValue(ctx.getText.toShort);
+      else exp = LongValue(ctx.getText.toLong)
+
+    }
 
 
     override def visitRealValue(ctx: OberonParser.RealValueContext): Unit =
       {
-        val t = tipo.dequeue()
+        var t = 1
+        if (!tipo.isEmpty)
+          t = tipo.dequeue()
+
         if(t == 1)
           exp = RealValue(ctx.getText.toFloat)
         else if(t == 3)
           exp = LongRealValue(ctx.getText.toDouble)
-        else
-          println("-----------------> DEU RUIM")
       }
 
     override def visitBoolValue(ctx: OberonParser.BoolValueContext): Unit =

@@ -511,4 +511,200 @@ class WakaWaka extends AnyFunSuite{
     module.accept(interpreter)
     assert(interpreter.env.lookup("x") == Some(RealValue(3.8.toFloat))) // FOR TO x
   }
+
+  test("Comparing REAL and REAL <") {
+    val path = Paths.get(getClass.getClassLoader.getResource("boolean/boolean1.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(RealValue(2))) // FOR TO x
+  }
+
+  test("Comparing REAL and REAL >") {
+    val path = Paths.get(getClass.getClassLoader.getResource("boolean/boolean2.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(RealValue(2))) // FOR TO x
+  }
+
+  test("Comparing REAL and REAL <=") {
+    val path = Paths.get(getClass.getClassLoader.getResource("boolean/boolean3.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(RealValue(2))) // FOR TO x
+  }
+
+  test("Comparing REAL and REAL >=") {
+    val path = Paths.get(getClass.getClassLoader.getResource("boolean/boolean4.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(RealValue(2))) // FOR TO x
+  }
+
+  test("Comparing REAL and REAL ==") {
+    val path = Paths.get(getClass.getClassLoader.getResource("boolean/boolean5.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(RealValue(2))) // FOR TO x
+  }
+
+  test("Comparing REAL and REAL #") {
+    val path = Paths.get(getClass.getClassLoader.getResource("boolean/boolean6.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(RealValue(2))) // FOR TO x
+  }
+
+  test("Comparing INTEGER and INTEGER = and >") {
+    val path = Paths.get(getClass.getClassLoader.getResource("boolean/boolean7.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(IntValue(1))) // FOR TO x
+  }
+
+  test("Comparing INTEGER and INTEGER >= and <") {
+    val path = Paths.get(getClass.getClassLoader.getResource("boolean/boolean8.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(IntValue(1))) // FOR TO x
+  }
+
+  test("Comparing INTEGER and INTEGER <= and >") {
+    val path = Paths.get(getClass.getClassLoader.getResource("boolean/boolean9.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(IntValue(1))) // FOR TO x
+  }
+
+  test("Comparing INTEGER and INTEGER !=") {
+    val path = Paths.get(getClass.getClassLoader.getResource("boolean/boolean10.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(IntValue(1))) // FOR TO x
+  }
+
+  test("Comparing REAL and INTEGER <= and >") {
+    val path = Paths.get(getClass.getClassLoader.getResource("boolean/boolean11.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(RealValue(1))) // FOR TO x
+  }
+
+  test("Comparing REAL and INTEGER > and <=") {
+    val path = Paths.get(getClass.getClassLoader.getResource("boolean/boolean12.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(IntValue(1))) // FOR TO x
+  }
+
+  test("Comparing REAL and INTEGER !=") {
+    val path = Paths.get(getClass.getClassLoader.getResource("boolean/boolean13.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(IntValue(1))) // FOR TO x
+  }
+
+  test("Comparing REAL and INTEGER < and >=") {
+    val path = Paths.get(getClass.getClassLoader.getResource("boolean/boolean14.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("x") == Some(RealValue(1))) // FOR TO x
+  }
 }

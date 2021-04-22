@@ -7,6 +7,7 @@ import br.unb.cic.oberon.environment.Environment
 import br.unb.cic.oberon.util.Values
 import br.unb.cic.oberon.visitor.OberonVisitorAdapter
 
+import scala.AnyVal
 import scala.io.StdIn
 
 /**
@@ -230,16 +231,16 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
     case BoolValue(v) => BoolValue(v)
     case Undef() => Undef()
     case VarExpression(name) => interpreter.env.lookup(name).get
-    case EQExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => BoolValue(v1.value == v2.value))
-    case NEQExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => BoolValue(v1.value != v2.value))
-    case GTExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => BoolValue(v1.value > v2.value))
-    case LTExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => BoolValue(v1.value < v2.value))
-    case GTEExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => BoolValue(v1.value >= v2.value))
-    case LTEExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => BoolValue(v1.value <= v2.value))
-    case AddExpression(left, right) => aritmeticExpression(left, right, 1) //(v1: Value[Number], v2: Value[Number])  => sum(v1, v2)
-    case SubExpression(left, right) => aritmeticExpression(left, right, 2) //(v1: Value[Number], v2: Value[Number])  => sum(v1, v2)
-    case MultExpression(left, right) => aritmeticExpression(left, right, 3)
-    case DivExpression(left, right) => aritmeticExpression(left, right, 4)
+    case AddExpression(left, right) => aritmeticLogicExpression(left, right, 1) //(v1: Value[Number], v2: Value[Number])  => sum(v1, v2)
+    case SubExpression(left, right) => aritmeticLogicExpression(left, right, 2) //(v1: Value[Number], v2: Value[Number])  => sum(v1, v2)
+    case MultExpression(left, right) => aritmeticLogicExpression(left, right, 3)
+    case DivExpression(left, right) => aritmeticLogicExpression(left, right, 4)
+    case EQExpression(left, right) => aritmeticLogicExpression(left, right, 5)
+    case NEQExpression(left, right) => aritmeticLogicExpression(left, right, 6)
+    case GTExpression(left, right) => aritmeticLogicExpression(left, right, 7)
+    case LTExpression(left, right) => aritmeticLogicExpression(left, right, 8)
+    case GTEExpression(left, right) => aritmeticLogicExpression(left, right, 9)
+    case LTEExpression(left, right) => aritmeticLogicExpression(left, right, 10)
     case AndExpression(left, right) => binExpression(left, right, (v1: Value[Boolean], v2: Value[Boolean]) => BoolValue(v1.value && v2.value))
     case OrExpression(left, right) => binExpression(left, right, (v1: Value[Boolean], v2: Value[Boolean]) => BoolValue(v1.value || v2.value))
     case FunctionCallExpression(name, args) => {
@@ -258,7 +259,7 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
     returnValue.get
   }
 
-  def aritmeticExpression(left: Expression, right: Expression, op: Int) : Expression = {
+  def aritmeticLogicExpression(left: Expression, right: Expression, op: Int) : Expression = {
     var vl = left.accept(this).asInstanceOf[Value[T]]
     var vr = right.accept(this).asInstanceOf[Value[T]]
 
@@ -277,7 +278,7 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
 
     op match {
       case 1 => {
-        if (types(0) == true) {println("-----> " + (v1.toDouble + v2.toDouble).toDouble); LongRealValue((v1.toDouble + v2.toDouble).toDouble)}
+        if (types(0) == true) LongRealValue((v1.toDouble + v2.toDouble).toDouble)
         else if (types(1) == true) RealValue((v1.toFloat + v2.toFloat).toFloat)
         else if (types(2) == true) LongValue((v1.toLong + v2.toLong).toLong)
         else if (types(3) == true) IntValue((v1.toInt + v2.toInt).toInt)
@@ -306,6 +307,36 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
         else if (types(2) == true) LongValue((v1.toLong / v2.toLong).toLong)
         else if (types(3) == true) IntValue((v1.toInt / v2.toInt).toInt)
         else ShortValue((v1.toShort / v2.toShort).toShort)
+      }
+
+      case 5 => {
+        if (types(0) == true || types(1) == true) BoolValue(v1.toDouble == v2.toDouble)
+        else BoolValue(v1.toLong == v2.toLong)
+      }
+
+      case 6 => {
+        if (types(0) == true || types(1) == true) BoolValue(v1.toDouble != v2.toDouble)
+        else BoolValue(v1.toLong != v2.toLong)
+      }
+
+      case 7 => {
+        if (types(0) == true || types(1) == true) BoolValue(v1.toDouble > v2.toDouble)
+        else BoolValue(v1.toLong > v2.toLong)
+      }
+
+      case 8 => {
+        if (types(0) == true || types(1) == true) BoolValue(v1.toDouble < v2.toDouble)
+        else BoolValue(v1.toLong < v2.toLong)
+      }
+
+      case 9 => {
+        if (types(0) == true || types(1) == true) BoolValue(v1.toDouble >= v2.toDouble)
+        else BoolValue(v1.toLong >= v2.toLong)
+      }
+
+      case 10 => {
+        if (types(0) == true || types(1) == true) BoolValue(v1.toDouble <= v2.toDouble)
+        else BoolValue(v1.toLong <= v2.toLong)
       }
     }
   }
