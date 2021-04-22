@@ -3,6 +3,7 @@ package br.unb.cic.oberon.parser
 import org.antlr.v4.runtime._
 import br.unb.cic.oberon.ast._
 import br.unb.cic.oberon.parser.OberonParser.StatementContext
+import scala.collection.mutable._
 
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters._
@@ -31,7 +32,7 @@ object ScalaParser {
 }
 
 class ParserVisitor {
-  var tipo = -1;
+  var tipo = Queue[Int]();
   var module: OberonModule = _
 
   def visitCompilationUnit(ctx: OberonParser.CompilationUnitContext): Unit = {
@@ -132,28 +133,28 @@ class ParserVisitor {
     var baseType: Type = _
 
     override def visitIntegerType(ctx: OberonParser.IntegerTypeContext): Unit = {
-      tipo = 0
+      tipo.enqueue(0)
       baseType = IntegerType
     }
 
     override def visitRealType(ctx: OberonParser.RealTypeContext): Unit = {
-      tipo = 1
+      tipo.enqueue(1)
       baseType = RealType
     }
 
     override def visitShortType(ctx: OberonParser.ShortTypeContext): Unit = {
-      tipo = 2
+      tipo.enqueue(2)
       baseType = ShortType
 
     }
 
     override def visitLongRealType(ctx: OberonParser.LongRealTypeContext): Unit = {
-      tipo = 3
+      tipo.enqueue(3)
       baseType = LongRealType
     }
 
     override def visitLongType(ctx: OberonParser.LongTypeContext): Unit = {
-      tipo = 4
+      tipo.enqueue(4)
       baseType = LongType
 
     }
@@ -174,9 +175,10 @@ class ParserVisitor {
 
     override def visitIntValue(ctx: OberonParser.IntValueContext): Unit =
       {
-        if(tipo == 0)
+        val t = tipo.dequeue()
+        if(t == 0)
           exp = IntValue(ctx.getText.toInt);
-        else if(tipo == 2)
+        else if(t == 2)
           exp = ShortValue(ctx.getText.toShort);
         else exp = LongValue(ctx.getText.toLong)
 
@@ -185,20 +187,42 @@ class ParserVisitor {
 
     override def visitRealValue(ctx: OberonParser.RealValueContext): Unit =
       {
-        if(tipo == 1)
+        val t = tipo.dequeue()
+        if(t == 1)
           exp = RealValue(ctx.getText.toFloat)
         else exp = LongRealValue(ctx.getText.toDouble)
       }
 
 
     override def visitLongValue(ctx: OberonParser.LongValueContext): Unit =
-      exp = LongValue(ctx.getText.toLong)
+      {
+        val t = tipo.dequeue()
+        if(t == 0)
+          exp = IntValue(ctx.getText.toInt);
+        else if(t == 2)
+          exp = ShortValue(ctx.getText.toShort);
+        else exp = LongValue(ctx.getText.toLong)
+
+      }
 
     override def visitLongRealValue(ctx: OberonParser.LongRealValueContext): Unit =
-      exp = LongRealValue(ctx.getText.toDouble)
+      {
+        val t = tipo.dequeue()
+        if(t == 1)
+          exp = RealValue(ctx.getText.toFloat)
+        else exp = LongRealValue(ctx.getText.toDouble)
+      }
 
     override def visitShortValue(ctx: OberonParser.ShortValueContext): Unit =
-      exp = ShortValue(ctx.getText.toShort)
+      {
+        val t = tipo.dequeue()
+        if(t == 0)
+          exp = IntValue(ctx.getText.toInt);
+        else if(t == 2)
+          exp = ShortValue(ctx.getText.toShort);
+        else exp = LongValue(ctx.getText.toLong)
+
+      }
 
     override def visitBoolValue(ctx: OberonParser.BoolValueContext): Unit =
       exp = BoolValue(ctx.getText == "True")

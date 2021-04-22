@@ -51,7 +51,7 @@ expression
  | realValue                                                                              #FloatValue
  | shortValue                                                                             #ShortIntValue
  | longValue                                                                              #LongIntValue
- | longRealValue                                                                          #DoubleValue
+ | longRealValue                                                                          #DoubleValue 
  | boolValue                                                                              #BooleanValue 
  | name = Id                                                                              #Variable
  | name = Id '(' arguments? ')'                                                           #FunctionCall
@@ -98,13 +98,15 @@ elseIfStmt : cond = expression 'THEN' stmt = statement ;
 // TODO: NOT, MOD, Relational operators, 
 // <assoc=right> expr '::' expr
 
-longRealValue: LONGREAL ;
-realValue: REAL ;
-longValue: LONGINT ;
 intValue : INT ;
+
+realValue: REAL ;
+
 shortValue: SHORTINT ;
 
+longValue: LONGINT ;
 
+longRealValue: LONGREAL ;
 
 boolValue: TRUE | FALSE ;
 
@@ -121,15 +123,16 @@ oberonType
 
 
 
-REAL : Digit+ '.' Digit+ ;
 
-INT : Digit+ ;
+INT : Digit+;
 
-LONGREAL : REAL ;
+REAL : Digit+ '.' Digit+;
 
-SHORTINT : INT ;
+SHORTINT : Digit+;
 
-LONGINT : INT ;
+LONGINT : Digit+;
+
+LONGREAL : Digit+ '.' Digit+;
 
 
 TRUE  : 'True' ;

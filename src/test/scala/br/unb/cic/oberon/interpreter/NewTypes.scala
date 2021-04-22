@@ -2,7 +2,7 @@ package br.unb.cic.oberon.interpreter
 
 import java.nio.file.{Files, Paths}
 
-import br.unb.cic.oberon.ast.{IntValue, RealValue, LongValue, ShortValue, LongRealValue, OberonModule}
+import br.unb.cic.oberon.ast.{IntValue, RealValue, LongValue, ShortValue, LongRealValue, OberonModule, Value}
 import br.unb.cic.oberon.parser.ScalaParser
 import org.scalatest.funsuite.AnyFunSuite
 
@@ -11,6 +11,43 @@ class WakaWaka extends AnyFunSuite{
   val interpreter = new Interpreter()
 
   interpreter.setTestEnvironment()
+
+  test("Testing a lot of assignments") {
+    val path = Paths.get(getClass.getClassLoader.getResource("aritmetic/aritmetic0.oberon").getFile)
+
+    assert(path != null)
+
+    val content = String.join("\n", Files.readAllLines(path))
+    val module = ScalaParser.parse(content)
+
+    assert(module.name == "SimpleModule")
+
+    module.accept(interpreter)
+    assert(interpreter.env.lookup("b") == Some(IntValue(2.toInt))) // FOR TO x
+    assert(interpreter.env.lookup("h") == Some(IntValue(8.toInt))) // FOR TO x
+    assert(interpreter.env.lookup("n") == Some(IntValue(14.toInt))) // FOR TO x
+    assert(interpreter.env.lookup("y") == Some(IntValue(24.toInt))) // FOR TO x
+
+    assert(interpreter.env.lookup("a") == Some(RealValue(1.5.toFloat))) // FOR TO x
+    assert(interpreter.env.lookup("g") == Some(RealValue(7.5.toFloat))) // FOR TO x
+    assert(interpreter.env.lookup("l") == Some(RealValue(12.5.toFloat))) // FOR TO x
+    assert(interpreter.env.lookup("w") == Some(RealValue(21.5.toFloat))) // FOR TO x
+
+    assert(interpreter.env.lookup("e") == Some(LongValue(5.toLong))) // FOR TO x
+    assert(interpreter.env.lookup("f") == Some(LongValue(6.toLong))) // FOR TO x
+    assert(interpreter.env.lookup("m") == Some(LongValue(13.toLong))) // FOR TO x
+    assert(interpreter.env.lookup("z") == Some(LongValue(24.toLong))) // FOR TO x
+    
+    assert(interpreter.env.lookup("c") == Some(ShortValue(3.toShort))) // FOR TO x
+    assert(interpreter.env.lookup("j") == Some(ShortValue(10.toShort))) // FOR TO x
+    assert(interpreter.env.lookup("k") == Some(ShortValue(11.toShort))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(ShortValue(24.toShort))) // FOR TO x
+    
+    assert(interpreter.env.lookup("d") == Some(LongRealValue(4.5.toDouble))) // FOR TO x
+    assert(interpreter.env.lookup("i") == Some(LongRealValue(9.5.toDouble))) // FOR TO x
+    assert(interpreter.env.lookup("o") == Some(LongRealValue(15.5.toDouble))) // FOR TO x
+    assert(interpreter.env.lookup("t") == Some(LongRealValue(29.5.toDouble))) // FOR TO x
+  }
 
   test("Testing LONG and SHORT operations") {
     val path = Paths.get(getClass.getClassLoader.getResource("aritmetic/aritmetic1.oberon").getFile)
@@ -51,7 +88,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(0.04999999999995.toDouble))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(LongRealValue(13.5D - 13.00000000000005D))) // FOR TO x
   }
 
   test("Testing LONGREAL and REAL *") {
@@ -79,7 +116,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(0.96296296296296666666666666666667.toDouble))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(LongRealValue(13.5D / 13.00000000000005D))) // FOR TO x
   }
 
   test("Testing LONGREAL LONGREAL +") {
@@ -96,7 +133,7 @@ class WakaWaka extends AnyFunSuite{
     assert(interpreter.env.lookup("x") == Some(LongRealValue(27.105294.toDouble))) // FOR TO x
   }
 
-  test("Testing LONGREAL and SHORTINT /") {
+  test("Testing LONGREAL and SHORTINT *") {
     val path = Paths.get(getClass.getClassLoader.getResource("aritmetic/aritmetic7.oberon").getFile)
 
     assert(path != null)
@@ -107,7 +144,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(67.763235.toDouble))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(LongRealValue((13.552647D * 5).toDouble))) // FOR TO x
   }
 
   test("Testing LONGINT and SHORTINT /") {
@@ -163,7 +200,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(50.00000000000025.toDouble))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(LongRealValue((10.00000000000005D * 5).toDouble))) // FOR TO x
   }
 
   test("Testing LONGREAL and INTEGER /") {
@@ -177,7 +214,7 @@ class WakaWaka extends AnyFunSuite{
     assert(module.name == "SimpleModule")
 
     module.accept(interpreter)
-    assert(interpreter.env.lookup("x") == Some(LongRealValue(2.00000000000001.toDouble))) // FOR TO x
+    assert(interpreter.env.lookup("x") == Some(LongRealValue((10.00000000000005D / 5).toDouble))) // FOR TO x
   }
 
   test("Testing REAL and INTEGER * -") {
