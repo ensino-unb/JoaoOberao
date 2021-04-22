@@ -136,14 +136,14 @@ class ParserVisitor {
     override def visitRealType(ctx: OberonParser.RealTypeContext): Unit =
       baseType = RealType
 
-    override def visitShortType(ctx: OberonParser.ShortTypeContext): Unit =
-      baseType = ShortType
+    // override def visitShortType(ctx: OberonParser.ShortTypeContext): Unit =
+    //   baseType = ShortType
 
-    override def visitLongRealType(ctx: OberonParser.LongRealTypeContext): Unit =
-      baseType = LongRealType
+    // override def visitLongRealType(ctx: OberonParser.LongRealTypeContext): Unit =
+    //   baseType = LongRealType
 
-    override def visitLongType(ctx: OberonParser.LongTypeContext): Unit =
-      baseType = LongType
+    // override def visitLongType(ctx: OberonParser.LongTypeContext): Unit =
+    //   baseType = LongType
 
     override def visitBooleanType(ctx: OberonParser.BooleanTypeContext): Unit = {
       baseType = BooleanType
@@ -165,14 +165,14 @@ class ParserVisitor {
     override def visitRealValue(ctx: OberonParser.RealValueContext): Unit =
       exp = RealValue(ctx.getText.toFloat)
 
-    override def visitLongValue(ctx: OberonParser.LongValueContext): Unit =
-      exp = LongValue(ctx.getText.toLong)
+    // override def visitLongValue(ctx: OberonParser.LongValueContext): Unit =
+    //   exp = LongValue(ctx.getText.toLong)
 
-    override def visitLongRealValue(ctx: OberonParser.LongRealValueContext): Unit =
-      exp = LongRealValue(ctx.getText.toDouble)
+    // override def visitLongRealValue(ctx: OberonParser.LongRealValueContext): Unit =
+    //   exp = LongRealValue(ctx.getText.toDouble)
 
-    override def visitShortValue(ctx: OberonParser.ShortValueContext): Unit =
-      exp = ShortValue(ctx.getText.toShort)
+    // override def visitShortValue(ctx: OberonParser.ShortValueContext): Unit =
+    //   exp = ShortValue(ctx.getText.toShort)
 
     override def visitBoolValue(ctx: OberonParser.BoolValueContext): Unit =
       exp = BoolValue(ctx.getText == "True")

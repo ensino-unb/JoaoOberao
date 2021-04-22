@@ -49,9 +49,9 @@ expression
  : '(' expression ')'                                                                     #Brackets
  | intValue                                                                               #IntegerValue
  | realValue                                                                              #FloatValue
- | shortValue                                                                             #ShortIntValue
- | longValue                                                                              #LongIntValue
- | longRealValue                                                                          #DoubleValue 
+//  | shortValue                                                                             #ShortIntValue
+//  | longValue                                                                              #LongIntValue
+//  | longRealValue                                                                          #DoubleValue 
  | boolValue                                                                              #BooleanValue 
  | name = Id                                                                              #Variable
  | name = Id '(' arguments? ')'                                                           #FunctionCall
@@ -102,20 +102,20 @@ intValue : INT ;
 
 realValue: REAL ;
 
-shortValue: SHORTINT ;
+// shortValue: SHORTINT ;
 
-longValue: LONGINT ;
+// longValue: LONGINT ;
 
-longRealValue: LONGREAL ;
+// longRealValue: LONGREAL ;
 
 boolValue: TRUE | FALSE ;
 
 oberonType
  : 'INTEGER'         #IntegerType
  | 'REAL'            #RealType
- | 'SHORTINT'        #ShortType
- | 'LONGINT'         #LongType
- | 'LONGREAL'        #LongRealType
+//  | 'SHORTINT'        #ShortType
+//  | 'LONGINT'         #LongType
+//  | 'LONGREAL'        #LongRealType
  | 'BOOLEAN'         #BooleanType
  | name = Id         #ReferenceType        // Reference for user defined types
  ;
@@ -123,16 +123,16 @@ oberonType
 
 
 
-LONGREAL : Digit+ '.' Digit+;
 
 INT : Digit+;
 
 REAL : Digit+ '.' Digit+;
 
-SHORTINT : Digit+;
+// SHORTINT : Digit+;
 
-LONGINT : Digit+;
+// LONGINT : Digit+;
 
+// LONGREAL : Digit+ '.' Digit+;
 
 
 TRUE  : 'True' ;

@@ -7,6 +7,7 @@ import br.unb.cic.oberon.environment.Environment
 import br.unb.cic.oberon.util.Values
 import br.unb.cic.oberon.visitor.OberonVisitorAdapter
 
+import scala.AnyVal
 import scala.io.StdIn
 
 /**
@@ -229,18 +230,18 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
     case BoolValue(v) => BoolValue(v)
     case Undef() => Undef()
     case VarExpression(name) => interpreter.env.lookup(name).get
-    case EQExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => BoolValue(v1.value == v2.value))
-    case NEQExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => BoolValue(v1.value != v2.value))
-    case GTExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => BoolValue(v1.value > v2.value))
-    case LTExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => BoolValue(v1.value < v2.value))
-    case GTEExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => BoolValue(v1.value >= v2.value))
-    case LTEExpression(left, right) => binExpression(left, right, (v1: Value[Int], v2: Value[Int]) => BoolValue(v1.value <= v2.value))
-    case AddExpression(left, right) => aritmeticExpression(left, right, 1) //(v1: Value[Number], v2: Value[Number])  => sum(v1, v2)
-    case SubExpression(left, right) => aritmeticExpression(left, right, 2) //(v1: Value[Number], v2: Value[Number])  => sum(v1, v2)
-    case MultExpression(left, right) => aritmeticExpression(left, right, 3)
-    case DivExpression(left, right) => aritmeticExpression(left, right, 4)
-    case AndExpression(left, right) => binExpression(left, right, (v1: Value[Boolean], v2: Value[Boolean]) => BoolValue(v1.value && v2.value))
-    case OrExpression(left, right) => binExpression(left, right, (v1: Value[Boolean], v2: Value[Boolean]) => BoolValue(v1.value || v2.value))
+    case EQExpression(left, right) => binExpression(left, right, (v1: String, v2: String) => BoolValue(v1.toDouble == v2.toDouble))
+    case NEQExpression(left, right) => binExpression(left, right, (v1: String, v2: String) => BoolValue(v1.toDouble != v2.toDouble))
+    case GTExpression(left, right) => binExpression(left, right, (v1: String, v2: String) => BoolValue(v1.toDouble > v2.toDouble))
+    case LTExpression(left, right) => binExpression(left, right, (v1: String, v2: String) => BoolValue(v1.toDouble < v2.toDouble))
+    case GTEExpression(left, right) => binExpression(left, right, (v1: String, v2: String) => BoolValue(v1.toDouble >= v2.toDouble))
+    case LTEExpression(left, right) => binExpression(left, right, (v1: String, v2: String) => BoolValue(v1.toDouble <= v2.toDouble))
+    case AddExpression(left, right) => aritmeticExpression(left, right, (v1: String, v2: String) => (v1.toDouble + v2.toDouble)) //(v1: Value[Number], v2: Value[Number])  => sum(v1, v2)
+    case SubExpression(left, right) => aritmeticExpression(left, right, (v1: String, v2: String) => (v1.toDouble - v2.toDouble)) //(v1: Value[Number], v2: Value[Number])  => sum(v1, v2)
+    case MultExpression(left, right) => aritmeticExpression(left, right, (v1: String, v2: String) => (v1.toDouble * v2.toDouble))
+    case DivExpression(left, right) => aritmeticExpression(left, right, (v1: String, v2: String) => (v1.toDouble / v2.toDouble))
+    case AndExpression(left, right) => booleanExpression(left, right, (v1: Value[Boolean], v2: Value[Boolean]) => BoolValue(v1.value && v2.value))
+    case OrExpression(left, right) => booleanExpression(left, right, (v1: Value[Boolean], v2: Value[Boolean]) => BoolValue(v1.value || v2.value))
     case FunctionCallExpression(name, args) => {
       val actualArguments = args.map(a => a.accept(this))
       interpreter.env.push()
@@ -257,63 +258,22 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
     returnValue.get
   }
 
-  def aritmeticExpression(left: Expression, right: Expression, op: Int) : Expression = {
+  def aritmeticExpression(left: Expression, right: Expression, fn: (String, String) => Double) : Expression = {
     var vl = left.accept(this).asInstanceOf[Value[T]]
     var vr = right.accept(this).asInstanceOf[Value[T]]
+    
+    val res = fn(vl.value.toString, vr.value.toString)
 
-    // [long real, real, long int, int, short int]
-
-    var types = Array(
-      vl.isInstanceOf[LongRealValue] || vr.isInstanceOf[LongRealValue],
-      vl.isInstanceOf[RealValue]     || vr.isInstanceOf[RealValue],
-      vl.isInstanceOf[LongValue]     || vr.isInstanceOf[LongValue],
-      vl.isInstanceOf[IntValue]      || vr.isInstanceOf[IntValue],
-      vl.isInstanceOf[ShortValue]    || vr.isInstanceOf[ShortValue]
-    )
-
-    val v1 = vl.value.toString
-    val v2 = vr.value.toString
-    /*
-    for (i <- 0 until 5) {
-      print(types(i))
+    if (vl.isInstanceOf[RealValue] || vl.isInstanceOf[RealValue]) {
+      RealValue(res.toFloat);
     }
-    print('\n')
-    */
-
-    op match {
-      case 1 => {
-        if (types(0) == true) {println("-----> " + (v1.toDouble + v2.toDouble).toDouble); LongRealValue((v1.toDouble + v2.toDouble).toDouble)}
-        else if (types(1) == true) RealValue((v1.toFloat + v2.toFloat).toFloat)
-        else if (types(2) == true) LongValue((v1.toLong + v2.toLong).toLong)
-        else if (types(3) == true) IntValue((v1.toInt + v2.toInt).toInt)
-        else ShortValue((v1.toShort + v2.toShort).toShort)
-      }
-
-      case 2 => {
-        if (types(0) == true) LongRealValue((v1.toDouble - v2.toDouble).toDouble)
-        else if (types(1) == true) RealValue((v1.toFloat - v2.toFloat).toFloat)
-        else if (types(2) == true) LongValue((v1.toLong - v2.toLong).toLong)
-        else if (types(3) == true) IntValue((v1.toInt - v2.toInt).toInt)
-        else ShortValue((v1.toShort - v2.toShort).toShort)
-      }
-
-      case 3 => {
-        if (types(0) == true) LongRealValue((v1.toDouble * v2.toDouble).toDouble)
-        else if (types(1) == true) RealValue((v1.toFloat * v2.toFloat).toFloat)
-        else if (types(2) == true) LongValue((v1.toLong * v2.toLong).toLong)
-        else if (types(3) == true) IntValue((v1.toInt * v2.toInt).toInt)
-        else ShortValue((v1.toShort * v2.toShort).toShort)
-      }
-
-      case 4 => {
-        if (types(0) == true) LongRealValue((v1.toDouble / v2.toDouble).toDouble)
-        else if (types(1) == true) RealValue((v1.toFloat / v2.toFloat).toFloat)
-        else if (types(2) == true) LongValue((v1.toLong / v2.toLong).toLong)
-        else if (types(3) == true) IntValue((v1.toInt / v2.toInt).toInt)
-        else ShortValue((v1.toShort / v2.toShort).toShort)
-      }
+    else {
+      IntValue(res.toInt);
     }
   }
+
+
+  
 
   /**
    * Eval a binary expression.
@@ -326,7 +286,14 @@ class EvalExpressionVisitor(val interpreter: Interpreter) extends OberonVisitorA
    *              after applying this function.
    * @tparam T a type parameter to set the function fn correctly.
    */
-  def binExpression[T](left: Expression, right: Expression, fn: (Value[T], Value[T]) => Expression): Expression = {
+  def binExpression[T](left: Expression, right: Expression, fn: (String, String) => Expression): Expression = {
+    val v1 = left.accept(this).asInstanceOf[Value[T]]
+    val v2 = right.accept(this).asInstanceOf[Value[T]]
+
+    fn(v1.value.toString, v2.value.toString)
+  }
+
+  def booleanExpression[T](left: Expression, right: Expression, fn: (Value[T], Value[T]) => Expression): Expression = {
     val v1 = left.accept(this).asInstanceOf[Value[T]]
     val v2 = right.accept(this).asInstanceOf[Value[T]]
 
