@@ -34,7 +34,7 @@ object ScalaParser {
 class ParserVisitor {
   var tipo = Queue[Int]();
   var module: OberonModule = _
-  var variables : List[br.unb.cic.oberon.ast.VariableDeclaration] = null
+  var variables : List[br.unb.cic.oberon.ast.VariableDeclaration] = List()
 
   def visitCompilationUnit(ctx: OberonParser.CompilationUnitContext): Unit = {
     val name = ctx.name
